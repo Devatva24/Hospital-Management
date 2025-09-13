@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @ToString
@@ -44,4 +45,12 @@ public class Patient {
 
     @Enumerated(EnumType.STRING)
     private BloodGroupType bloodGroup;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "patient_insurance_id") // owning side : owns the foreign key and updates it accordingly
+    private Insurance insurance;
+
+    @OneToMany(mappedBy = "patient") //inverse side
+    @ToString.Exclude
+    private List<Appointment> appointments;
 }
