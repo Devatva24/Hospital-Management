@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.engine.spi.CascadeStyle;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,11 +47,10 @@ public class Patient {
     @Enumerated(EnumType.STRING)
     private BloodGroupType bloodGroup;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "patient_insurance_id") // owning side : owns the foreign key and updates it accordingly
     private Insurance insurance;
 
-    @OneToMany(mappedBy = "patient") //inverse side
-    @ToString.Exclude
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER) //inverse side
     private List<Appointment> appointments;
 }

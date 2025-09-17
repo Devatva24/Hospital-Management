@@ -25,4 +25,12 @@ public class InsuranceService {
         insurance.setPatient(patient); // to maintain the bidirectional relationship/consistence
         return patient;
     }
+
+    @Transactional
+    public Patient disassociatePatientFromInsurance(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Patient with id: " + patientId + " not found."));
+        patient.setInsurance(null);
+        return patient;
+    }
 }

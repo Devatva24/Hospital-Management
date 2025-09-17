@@ -26,7 +26,11 @@ public class PatientTest {
 
     @Test
     public void testPatientRepository() {
-        List<Patient> patientList = patientRepository.findAll();
+        //List<Patient> patientList = patientRepository.findAll();
+        // leads to N+1 problem when gathered with FetchType=EAGER; too much database call just for one operation
+        //solution : either put fetchType = lazy and then handle the reponse in the DTO layer
+        // else make a custom query to fetch all the data at once
+        List<Patient> patientList = patientRepository.findAllPatientWithAppointments();
         System.out.println(patientList);
     }
 
